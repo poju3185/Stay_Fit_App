@@ -1,0 +1,421 @@
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
+#:import Label kivy.uix.label.Label
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+
+WindowManager:
+    LoginPage:
+    MainWindow:
+    SecondWindow:
+    ThirdWindow:
+    FourthWindow:
+    FifthWindow:
+    WelcomeWindow:
+        
+
+<Button>
+    size_hint: (0.2, 0.2)
+
+<LoginPage>:
+    name: "login"
+    username: username
+    password: password
+    
+
+    FloatLayout:
+        Label:
+            text: "Please Sign In/ Register"
+            font_size: 60
+            pos_hint:{"x":0, "y":0.3}
+        
+        Label:
+            text: "Username: "
+            font_size: 30
+            pos_hint:{'x':-0.3, 'y':0.09}
+          
+
+        TextInput:
+            id: username
+            multiline: False
+            size_hint: (0.5,0.08)
+            pos_hint:{'x':0.3, 'y':0.55}
+            hint_text: 'Enter Username'
+            font_size: 24
+        
+        Label:
+            text: "Password: "
+            font_size: 30
+            pos_hint:{'x':-0.3, 'y':-0.11}
+        TextInput:
+            id: password
+            multiline: False
+            size_hint: (0.5,0.08)
+            pos_hint:{'x':0.3, 'y':0.35}
+            hint_text: 'Enter Password'
+            password: True
+            font_size: 24
+
+		Button:
+            id: Login
+			text: "Login/ Register"
+            font_size: 20
+            size_hint: (0.2,0.13)
+            pos_hint:{"x":0.38, "y":0.1}
+			on_press: root.press()
+
+			
+
+<MainWindow>:
+    name: "main"
+    id: MainWindow
+    on_enter: root.refresh()
+    FloatLayout:
+        Label:
+            id: main_text
+            text: "-"
+            font_size: 80
+            pos_hint:{"x":0, "y":0.3}
+        Label:
+            id: main_text2
+            text: "Kcal remains"
+            font_size: 24
+            pos_hint:{"x":0, "y":0.2}
+        #Button:
+        #    text: "Refresh"
+        #    font_size: 8
+        #    on_release:
+        #        root.refresh()
+        #    size_hint: (0.05, 0.05)
+        #    pos_hint: {'x': 0.6, 'y': 0.8}
+    
+        Label:
+            id: target_kcal_shown
+            text: "" 
+            font_size: 54
+            pos_hint: {'x': -0.2, 'y': 0.05}
+        Label:
+            id: target_kcal_shown2
+            text: "Goal" 
+            font_size: 18
+            pos_hint: {'x': -0.2, 'y': -0.05}
+        Label:
+            id: consumed_kcal_shown
+            text: ""
+            font_size: 54
+            pos_hint: {'x': 0.2, 'y': 0.05}
+        Label:
+            id: consumed_kcal_shown2
+            text: "Consumed"
+            font_size: 18
+            pos_hint: {'x': 0.2, 'y': -0.05}
+
+        Button:
+            text: "Edit"
+            #{"x", "y", "top", "bottom", "left", "right"}
+            pos_hint:{"x":0.8, "y":0.6}
+            size_hint: (0.06, 0.06)
+            background_color: 28/255, 28/255, 30/255, 1
+            on_release: 
+                app.root.current = "fifth"
+                root.manager.transition.direction = "right"
+            Image:
+                source: 'images/edit1.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            Image:
+                source: 'images/edit2.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y        
+        Button:
+            id: scan_btn
+            text: "     Scan"
+            font_size: 40
+            on_release: 
+                app.root.current = "second"
+                root.manager.transition.direction = "left"
+            pos_hint:{'x':0.15, 'y':0.15}
+            size_hint:(0.3,0.2)
+            background_color: 88/255, 85/255, 245/255
+        Image:
+            source: 'images/man.png'
+            center_x: scan_btn.center_x - 83
+            center_y: scan_btn.center_y + 20
+            size_hint_x: 0.23
+            allow_stretch: True
+                            
+
+        Button:
+            id: add_btn
+            text: "   Add"
+            font_size: 40
+            on_release:
+                app.root.current = "fourth"
+                root.manager.transition.direction = "left"
+            pos_hint:{'x':0.55, 'y':0.15}
+            size_hint:(0.3,0.2)
+            background_color: 191/255, 93/255, 243/255
+        Image:
+            source: 'images/woman.png'
+            center_x: add_btn.center_x - 50
+            center_y: add_btn.center_y + 20
+            size_hint_x: 0.28
+            allow_stretch: True
+
+
+<SecondWindow>:
+    name: "second"
+    id: SecondWindow
+
+    FloatLayout:
+        ZBarCam:
+            id: qrcodecam
+            decoded_text: ''.join([str(symbol.data.decode('utf-8')) for symbol in qrcodecam.symbols])
+        Label:
+            id: qrcode
+            pos_hint:{'x':0, 'y':0}
+            font_size: 60
+            color:　60/255, 179/255, 113/255
+            text:'' if qrcodecam.decoded_text == '' else 'success'
+
+        Button:
+            text: "Add"
+            pos_hint:{"x":0.45, "y":0.1}
+            size_hint: (0.06,0.06)
+        
+            on_press:
+                # 做了三件事 1. 切換到"third"視窗 2. 用save()函數把掃到的raw text傳回python
+                if qrcode.text != '': app.root.current = "third"; root.save(qrcodecam.decoded_text)
+            Image:
+                source: 'images/add1.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            Image:
+                source: 'images/add2.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y 
+
+        Button:
+            text: ""
+            pos_hint:{'left':1, 'top':1}
+            size_hint: (0.06,0.06)
+            background_color: 28/255, 28/255, 30/255, 1
+            on_release: 
+                app.root.current = "main"
+                root.manager.transition.direction = "right"
+            Image:
+                source: 'images/back.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            
+<ThirdWindow>:
+    name: "third"
+    id: ThirdWindow
+
+
+    Label:
+        id: label_text
+        pos_hint:{'x':0, 'y':0}
+        text: 'Food Added'
+        font_size: 60
+        color:　60/255, 179/255, 113/255
+
+    
+    Button:
+        text: "G"
+        pos_hint:{"x":0.47, "y":0.05}
+        size_hint: (0.06, 0.06)
+        on_release:
+            app.root.current = "second"
+            root.manager.transition.direction = "right"
+        Image:
+            source: 'images/go1.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+        Image:
+            source: 'images/go2.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y    
+
+
+<FourthWindow>:
+    name: "fourth"
+
+    item: item
+    calorie: calorie
+    quantity: quantity
+    price: price
+
+    FloatLayout:
+        Button:
+            id: back
+            text: ""
+            pos_hint:{'left':1, 'top':1}
+            size_hint: (0.06,0.06)
+            background_color: 28/255, 28/255, 30/255, 1
+            on_release:
+                app.root.current = "main"
+                root.manager.transition.direction = "right"
+            Image:
+                source: 'images/back.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y    
+
+
+        Label:
+            text: "Add Food"
+            font_size: 28
+            pos_hint:{'y':0.4}
+
+        Label:
+            text: "Name:"
+            font_size: 16
+            pos_hint:{'x':-0.3, 'y':0.3}
+        TextInput:
+            id: item
+            multiline: False
+            size_hint: (0.6,0.08)
+            pos_hint:{'x':0.17, 'y':0.68}
+            font_size: 24
+
+        Label:
+            text: "Kcal: "
+            font_size: 16
+            pos_hint:{'x':-0.3, 'y':0.15}
+        TextInput:
+            id: calorie
+            multiline: False
+            size_hint: (0.6,0.08)
+            pos_hint:{'x':0.17, 'y':0.54}
+            font_size: 24
+
+        Label:
+            text: "Quantity:"
+            font_size: 16
+            pos_hint:{'x':-0.28, 'y':0}
+        TextInput:
+            id: quantity
+            multiline: False
+            size_hint: (0.6,0.08)
+            pos_hint:{'x':0.17, 'y':0.4}
+            font_size: 24
+
+        Label:
+            text: "Price(NTD/per):"
+            font_size: 16
+            pos_hint:{'x':-0.26, 'y':-0.15}
+        TextInput:
+            id: price
+            multiline: False
+            size_hint: (0.6,0.08)
+            pos_hint:{'x':0.17, 'y':0.25}
+            font_size: 24
+        
+        Button:
+            text: "Add"
+            pos_hint:{"x":0.45, "y":0.1}
+            size_hint: (0.06,0.06)
+            
+            on_press: root.press()
+            on_release:
+                #按了要記錄資料和進行運算
+            Image:
+                source: 'images/add1.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            Image:
+                source: 'images/add2.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y   
+
+<FifthWindow>:
+    name: "fifth"
+
+    target: target
+
+
+
+    FloatLayout:
+        Image:
+            source:'images/sun.png'
+            pos_hint:{"x":0.40, "y":0.4}
+            size_hint_x: 0.18
+            allow_stretch: True
+        Image:
+            source:'images/meditation.png'
+            pos_hint:{"x":0.36, "y":0.22}
+            size_hint_x: 0.28
+            allow_stretch: True
+        Label:
+            text: "Please Enter Your Goal"
+            pos_hint:{"x":0, "y":0}
+            font_size: 40
+        TextInput:
+            id: target
+            multiline: False
+            size_hint: (0.5, 0.16)
+            halign: "center"
+            pos_hint:{"x":0.25, "y":0.24}
+            font_size: 60
+        Label:
+            text: "Kcal/Day"
+            pos_hint:{"x":0, "y":-0.3}
+            font_size: 28
+
+        Button:
+            text: "G"
+            pos_hint:{"x":0.47, "y":0.05}
+            size_hint: (0.06, 0.06)
+            on_press: 
+                root.press()
+            on_release:
+                app.root.current = "main"
+                root.manager.transition.direction = "left"
+            Image:
+                source: 'images/go1.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            Image:
+                source: 'images/go2.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y    
+
+<WelcomeWindow>:
+    name: "welcome"
+    id: WelcomeWindow
+    canvas.before:
+        Color:
+            rgba: 87/255,85/255,244/255, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    FloatLayout:
+        Label:
+            id: hello
+            text: "Hello"
+            font_size: 60
+            pos_hint:{"x":0, "y":0.38}
+        Image:
+            source:'images/hello.png'
+            pos_hint:{"x":0.38, "y":0.06}
+            size_hint_x: 0.22
+            allow_stretch: True
+        Label:
+            id: introduction
+            text: "You can record your daily calorie intake here"
+            font_size: 24
+            pos_hint:{"x":0, "y":-0.25}
+        
+        Button:
+            text: "G"
+            pos_hint:{"x":0.45, "y":0.1}
+            size_hint: (0.06, 0.06)
+            on_release:
+                app.root.current = "fifth"
+                root.manager.transition.direction = "left"
+            Image:
+                source: 'images/go1_deep.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            Image:
+                source: 'images/go2.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y    

@@ -1,0 +1,298 @@
+WindowManager:
+    LoginPage:
+	MainWindow:
+	SecondWindow:
+	ThirdWindow:
+
+<Button>
+	size_hint: (0.2, 0.2)
+	background_color: (87/255.0, 86/255.0, 236/255.0, 1)
+	
+<TextInput>
+    background_color: (42/255.0, 42/255.0, 53/255.0, 1)#rgba(42, 42, 53, 1)
+    cursor_color: (1, 1, 1, 1)
+    text_color: (1, 1, 1, 1)
+    #text_color: 1, 1, 1, 1
+    #text = TextInput(foreground_color=(1, 1, 1, 1))
+
+<LoginPage>:
+    name: "login"
+    username: username
+    password: password  
+    
+    GridLayout:
+        cols: 1
+        
+        Label:
+            text: "Please Sign in/ Register"
+            font_size: 32
+            size_hint_y: None
+            height: 100      
+        
+        BoxLayout:
+            orientation: "vertical"
+            Image:
+                source:'images/login.png'
+        
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		BoxLayout:
+                orientation: "vertical"
+                
+                Label:
+    				text: "Username: "
+    				font_size: 32
+    			AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+        			TextInput:
+        				id: username
+        				multiline: False
+        				size_hint_y: None
+            			height: 80
+            			size_hint_x: None
+            			width: 900
+                
+                Label:
+                    text: "Password: "
+                    font_size: 32
+                    
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    TextInput:
+                        id: password
+                        multiline: False
+                        size_hint_y: None
+            			height: 80
+            			size_hint_x: None
+            			width: 900
+            
+                    
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		Button:
+    			text: "Login/ Register"
+    			size_hint_y: None
+    			height: 200
+    			size_hint_x: None
+    			width: 300
+    			on_press: root.press()
+    			on_release:
+    				app.root.current = "main" #if username !="" else "login"
+    				root.manager.transition.direction = "left"
+    
+			
+            		
+<MainWindow>:
+	name: "main"
+
+	GridLayout:
+		cols:1
+
+		FloatLayout:
+			Button:
+				text: "Edit"
+				#{"x", "y", "top", "bottom", "left", "right"}
+				pos_hint:{"x":0.8, "top":1}
+				
+				on_release:
+					app.root.current = "second"
+					root.manager.transition.direction = "right"
+        GridLayout:
+            cols: 1
+            Label:
+                text: "323 cal left" #要怎麼印出數字
+                font_size: 60
+        
+        GridLayout:
+            cols: 1
+            GridLayout:
+                cols: 2
+                Label:
+                    id: target_cal_shown
+                    text: "target" 
+                Label:
+                    id: accumulated_cal_shown
+                    text: "accumulated"
+                
+		GridLayout:
+			cols:2
+			Button:
+				text: "Camera"
+
+			Button:
+				text: "Add"
+				on_release:
+					app.root.current = "third"
+					root.manager.transition.direction = "left"
+
+<SecondWindow>:
+    name: "second"
+    target: target  
+    
+    GridLayout:
+        cols: 1
+        
+        BoxLayout:
+            orientation: "vertical"
+            Image:
+                source:'images/login2.png'
+        Label:
+            text: "Your Daily Target Calorie Tntake"
+            font_size: 32
+            size_hint_y: None
+            height: 100      
+        
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		BoxLayout:
+                orientation: "vertical"
+                
+                Label:
+    				text: "Calories (kcal/day) "
+    				font_size: 32
+    			AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+        			TextInput:
+        				id: target
+        				multiline: False
+        				size_hint_y: None
+            			height: 80
+            			size_hint_x: None
+            			width: 900
+            
+                    
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		Button:
+    			text: "save"
+    			size_hint_y: None
+    			height: 150
+    			size_hint_x: None
+    			width: 150
+    			on_press: root.press()
+    			on_release:
+        			app.root.current = "main"
+        			root.manager.transition.direction = "left"
+
+<ThirdWindow>:
+	name: "third"
+
+    item: item 
+    calorie: calorie
+    quantity: quantity
+    price: price
+    
+    GridLayout:
+        cols: 1
+        BoxLayout:
+            orientation: "horizontal"
+            pos_hint:{"top":1}
+            Button: 
+                text: "Back"
+                size_hint_x: None
+                width: 125
+                on_release:
+                    app.root.current = "main" 
+                    root.manager.transition.direction = "right"
+            
+            Label:
+                text: "What Did You Eat?"
+                font_size: 32
+                size_hint_y: None
+                height: 100      
+        
+       
+        
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		BoxLayout:
+                orientation: "vertical"
+                
+                Label:
+    				text: "Item: "
+    				font_size: 24
+    			AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+        			TextInput:
+        				id: item
+        				multiline: False
+        				size_hint_y: None
+            			height: 50
+            			size_hint_x: None
+            			width: 900
+                
+                Label:
+                    text: "Calories: "
+                    font_size: 24
+                    
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    TextInput:
+                        id: calorie
+                        multiline: False
+                        size_hint_y: None
+            			height: 50
+            			size_hint_x: None
+            			width: 900
+
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		BoxLayout:
+                orientation: "vertical"
+                
+                Label:
+    				text: "Quantity: "
+    				font_size: 24
+    			AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+        			TextInput:
+        				id: quantity
+        				multiline: False
+        				size_hint_y: None
+            			height: 50
+            			size_hint_x: None
+            			width: 900
+                
+                Label:
+                    text: "Price: "
+                    font_size: 24
+                    
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    TextInput:
+                        id: price
+                        multiline: False
+                        size_hint_y: None
+            			height: 50
+            			size_hint_x: None
+            			width: 900
+            
+                    
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+    		Button:
+    			text: "Add"
+    			size_hint_y: None
+    			height: 100
+    			size_hint_x: None
+    			width: 150
+    			on_press: root.press()
+    			on_release:
+        			#
+            			
+
+		
